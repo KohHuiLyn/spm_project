@@ -106,6 +106,7 @@ export default function RootLayout({
                         type="search"
                         placeholder="Levi's: Up to 40% Off"
                         className="w-full rounded-full border border-gray-300 pl-4 pr-10 py-2 text-sm"
+                        style={{backgroundColor:'transparent'}}
                       />
                       <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
                         <Search className="h-6 w-6" color="white" style={{backgroundColor:'black', padding:3, borderRadius:'1000px'}} />

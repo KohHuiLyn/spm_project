@@ -4,6 +4,49 @@
 
 @layer base {
   :root {
+  
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+  
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary colors */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    
+    /* Supporting colors */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
+    
+    /* System colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 0%;
+    
+    /* Sale price is red on Zalora */
+    --sale: 0 72% 51%;
+    --sale-foreground: 0 0% 100%;
+    
+    --radius: 0.25rem;
+    
+    /* Chart colors */
+    --chart-1: 0 0% 0%;
+    --chart-2: 220 70% 50%;
+    --chart-3: 142 76% 36%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
     /* Light mode - Zalora uses a clean white/black scheme */
     --background: 0 0% 100%;
     --foreground: 0 0% 0%;
@@ -45,41 +88,6 @@
     --chart-3: 142 76% 36%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-  }
-
-  .dark {
-    /* Dark mode */
-    --background: 0 0% 10%;
-    --foreground:  0 0% 95%; 
-    --card: 0 0% 15%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 15%;
-    --popover-foreground: 0 0% 95%;
-    
-    /* Invert for dark mode */
-    --primary: 0 0% 95%;
-    --primary-foreground: 0 0% 10%;
-    
-    /* Secondary colors */
-    --secondary: 0 0% 20%;
-    --secondary-foreground: 0 0% 95%;
-    
-    /* Supporting colors */
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 0 0% 25%;
-    --accent-foreground: 0 0% 95%;
-    
-    /* System colors */
-    --destructive: 0 84% 45%;
-    --destructive-foreground: 0 0% 95%;
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 0 0% 95%;
-    
-    /* Sale price is red on Zalora */
-    --sale: 0 72% 60%;
-    --sale-foreground: 0 0% 100%;
   }
 }
 
