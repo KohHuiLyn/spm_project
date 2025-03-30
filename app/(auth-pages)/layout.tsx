@@ -10,7 +10,7 @@ export default async function Layout({
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <Link href="/">
           <img
-            src="/images/logos.png"
+            src="/images/logo.png"
             alt="Zalora Logo"
             className="h-8 mx-auto mb-6"
           />
