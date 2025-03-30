@@ -17,7 +17,7 @@ export function ProductCard({ product }: { product: Product }) {
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.name}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 max-h-[450px]"
         />
         <button className="absolute right-2 top-2 rounded-full bg-white/80 p-1.5 text-black hover:bg-white">
           <Heart className="h-4 w-4" />

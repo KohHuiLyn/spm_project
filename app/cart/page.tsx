@@ -47,48 +47,6 @@ export default function CartPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background">
-        <div className="container flex h-16 items-center">
-          <div className="mr-4 hidden md:flex">
-            <Link href="/" className="mr-6 flex items-center space-x-2">
-              <span className="text-xl font-bold">ZALORA</span>
-            </Link>
-            <nav className="flex items-center space-x-6 text-sm font-medium">
-              <Link href="/women" className="transition-colors hover:text-primary">
-                WOMEN
-              </Link>
-              <Link href="/men" className="transition-colors hover:text-primary">
-                MEN
-              </Link>
-              <Link href="/luxury" className="transition-colors hover:text-primary">
-                LUXURY
-              </Link>
-              <Link href="/beauty" className="transition-colors hover:text-primary">
-                BEAUTY
-              </Link>
-              <Link href="/kids" className="transition-colors hover:text-primary">
-                KIDS
-              </Link>
-              <Link href="/sports" className="transition-colors hover:text-primary">
-                SPORTS
-              </Link>
-              <Link href="/lifestyle" className="transition-colors hover:text-primary">
-                LIFESTYLE
-              </Link>
-            </nav>
-          </div>
-          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-            <nav className="flex items-center">
-              <Button variant="ghost" size="icon" aria-label="Cart">
-                <ShoppingBag className="h-5 w-5" />
-                <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-                  {cartItems.reduce((total, item) => total + item.quantity, 0)}
-                </span>
-              </Button>
-            </nav>
-          </div>
-        </div>
-      </header>
       <div className="container px-4 py-6 md:px-6">
         <div className="mb-6 flex items-center space-x-2 text-sm text-muted-foreground">
           <Link href="/" className="transition-colors hover:text-foreground">

@@ -16,12 +16,12 @@ export interface Product {
   }
   
   export const categories = [
-    { name: "Women's Fashion", href: "/women", image: "/images/categories/women.jpg" },
-    { name: "Men's Fashion", href: "/men", image: "/images/categories/mens.webp" },
-    { name: "Kids", href: "/kids", image: "/images/categories/kids.jpeg" },
-    { name: "Outerwear", href: "/outerwear", image: "/images/categories/jacket.webp" },
-    { name: "Sports", href: "/sports", image: "/images/categories/sports.jpg" },
-    { name: "Sleeveless", href: "/sleeveless", image: "/images/categories/tank.jpg" },
+    { name: "Women's Fashion", href: "/products", image: "/images/categories/women.jpg" },
+    { name: "Men's Fashion", href: "/products", image: "/images/categories/mens.webp" },
+    { name: "Kids", href: "/products", image: "/images/categories/kids.jpeg" },
+    { name: "Outerwear", href: "/products", image: "/images/categories/jacket.webp" },
+    { name: "Sports", href: "/products", image: "/images/categories/sports.jpg" },
+    { name: "Sleeveless", href: "/products", image: "/images/categories/tank.jpg" },
   ]
 
   

@@ -17,6 +17,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Slider } from "@/components/ui/slider"
 import { ProductCard } from "@/components/product-card"
 export default function ProductsPage() {
+    
   return (
     <div className="flex min-h-screen flex-col">
       <div className="container px-4 py-6 md:px-6">
@@ -254,7 +255,7 @@ export default function ProductsPage() {
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 " >
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 " >
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

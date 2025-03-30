@@ -2,6 +2,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { categories, products } from "@/lib/data"
+import { ProductCard } from "@/components/product-card"
 export default function Home() {
   return (
     <div className="flex flex-col">
@@ -59,28 +60,11 @@ export default function Home() {
       <section className="w-full py-12">
         <div className="container px-4 md:px-6">
           <h2 className="text-2xl font-bold mb-6">For you</h2>
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-            {products.slice(0, 8).map((product) => (
-              <div key={product.id} className="group relative overflow-hidden rounded-lg border bg-background">
-                <div className="aspect-h-1 aspect-w-1 relative overflow-hidden bg-gray-200 flex items-center justify-center h-48">
-                  <span className="text-gray-500">Product Image</span>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-sm font-medium">{product.brand}</h3>
-                  <h4 className="mb-2 text-sm">{product.name}</h4>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">${product.price.toFixed(2)}</span>
-                      {product.originalPrice && (
-                        <span className="text-sm text-gray-500 line-through">${product.originalPrice.toFixed(2)}</span>
-                      )}
-                    </div>
-                    {product.discount && <span className="text-xs text-green-600">{product.discount}% OFF</span>}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 " >
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
         </div>
       </section>
 

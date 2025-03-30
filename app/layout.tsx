@@ -8,7 +8,6 @@ import { ThemeProvider } from "next-themes"
 import Link from "next/link"
 import { Search, Heart, ShoppingBag } from "lucide-react"
 import "./globals.css"
-
 const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
 
 export const metadata = {
@@ -93,9 +92,13 @@ export default function RootLayout({
               <div className="container mx-auto px-4 py-4">
                 {/* Logo and search row */}
                 <div className="flex items-center justify-between mb-4">
-                  <Link href="/" className="flex-shrink-0">
-                    <div className="text-2xl tracking-wider font-light">ZALORA</div>
-                  </Link>
+                <Link href="/">
+                  <img
+                    src="/images/logo.png"
+                    alt="Zalora Logo"
+                    className="h-6 my-auto mx-auto"
+                  />
+                </Link>
 
                   <div className="flex-grow mx-8 max-w-xl">
                     <div className="relative">
@@ -114,19 +117,19 @@ export default function RootLayout({
                     <button aria-label="Wishlist">
                       <Heart className="h-5 w-5" />
                     </button>
-                    <button aria-label="Shopping Bag" className="relative">
-                      <ShoppingBag className="h-5 w-5" />
-                      <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
-                        0
-                      </span>
-                    </button>
-                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+                    <Link href="/cart" aria-label="Shopping Bag" className="relative">
+                    <ShoppingBag className="h-5 w-5" />
+                    <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
+                      0
+                    </span>
+                  </Link>
+                    <HeaderAuth/>
                   </div>
                 </div>
 
                 {/* Navigation categories */}
                 <nav className="flex items-center justify-center space-x-8 text-sm font-medium">
-                  <Link href="/products?filter=women" className="hover:font-bold">
+                  <Link href="/products" className="hover:font-bold">
                     WOMEN
                   </Link>
                   <Link href="/men" className="hover:font-bold">
