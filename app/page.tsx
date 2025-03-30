@@ -3,7 +3,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { categories, products } from "@/lib/data"
 import { ProductCard } from "@/components/product-card"
+
 export default function Home() {
+  
   return (
     <div className="flex flex-col">
       <section className="w-full py-6 md:py-12">

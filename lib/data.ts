@@ -193,3 +193,44 @@ export interface Product {
     { name: "Puma", logo: "/images/brands/puma.png" },
   ]
   
+  export const recommendedProducts = [
+    {
+      id: 1,
+      name: "Classic Crew Neck T-Shirt",
+      brand: "Adidas",
+      price: 24.99,
+      discount: 20,
+      image: "/placeholder.svg?height=300&width=300",
+    },
+    {
+      id: 2,
+      name: "Graphic Print T-Shirt",
+      brand: "Puma",
+      price: 29.99,
+      image: "/placeholder.svg?height=300&width=300",
+    },
+    {
+      id: 3,
+      name: "V-Neck Cotton T-Shirt",
+      brand: "H&M",
+      price: 19.99,
+      discount: 15,
+      image: "/placeholder.svg?height=300&width=300",
+    },
+    {
+      id: 4,
+      name: "Long Sleeve T-Shirt",
+      brand: "Nike",
+      price: 34.99,
+      image: "/placeholder.svg?height=300&width=300",
+    },
+    {
+      id: 5,
+      name: "Striped Cotton T-Shirt",
+      brand: "Zara",
+      price: 27.99,
+      discount: 30,
+      image: "/placeholder.svg?height=300&width=300",
+    },
+  ]
+  

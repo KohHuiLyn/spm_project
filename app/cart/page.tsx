@@ -1,47 +1,35 @@
 import Link from "next/link"
 import { ChevronRight, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
-
+import { cookies } from "next/headers"
+import { createClient } from "@/utils/supabase/server";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { redirect } from "next/navigation"
+import { recommendedProducts } from "@/lib/data";
 
-export default function CartPage() {
-  // Sample cart data
-  const cartItems = [
-    {
-      id: 1,
-      name: "Slim Fit Cotton T-Shirt",
-      brand: "Nike",
-      price: 29.99,
-      quantity: 2,
-      size: "M",
-      color: "Black",
-      image: "/placeholder.svg?height=120&width=120",
-    },
-    {
-      id: 2,
-      name: "Floral Print Summer Dress",
-      brand: "Zara",
-      price: 49.99,
-      quantity: 1,
-      size: "S",
-      color: "Blue",
-      image: "/placeholder.svg?height=120&width=120",
-    },
-    {
-      id: 3,
-      name: "Slim Fit Jeans",
-      brand: "Levi's",
-      price: 59.99,
-      quantity: 1,
-      size: "32",
-      color: "Dark Blue",
-      image: "/placeholder.svg?height=120&width=120",
-    },
-  ]
+export default async function CartPage() {
+  const supabase = await createClient();
 
-  // Calculate totals
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/sign-in");
+  }
+
+  const userId = user.id // Replace this with logic to get actual logged-in user
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cart?user_id=${userId}`, {
+    cache: "no-store",
+  })
+
+  const cartItems = await res.json()
+
+  const subtotal = cartItems.reduce((total: number, item: any) => {
+    return total + item.products.price * item.quantity
+  }, 0)
+
   const shipping = 4.99
   const total = subtotal + shipping
 
@@ -49,53 +37,57 @@ export default function CartPage() {
     <div className="flex min-h-screen flex-col">
       <div className="container px-4 py-6 md:px-6">
         <div className="mb-6 flex items-center space-x-2 text-sm text-muted-foreground">
-          <Link href="/" className="transition-colors hover:text-foreground">
-            Home
-          </Link>
+          <Link href="/" className="transition-colors hover:text-foreground">Home</Link>
           <ChevronRight className="h-4 w-4" />
           <span className="font-medium text-foreground">Shopping Cart</span>
         </div>
+
         <h1 className="mb-6 text-2xl font-bold">Shopping Cart</h1>
+
         <div className="grid gap-8 lg:grid-cols-3">
+          {/* LEFT: CART LIST */}
           <div className="lg:col-span-2">
             {cartItems.length > 0 ? (
               <div className="space-y-4">
-                {cartItems.map((item) => (
+                {cartItems.map((item: any) => (
                   <div key={item.id} className="rounded-lg border bg-background p-4">
                     <div className="flex items-start gap-4">
                       <div className="h-24 w-24 overflow-hidden rounded-md">
                         <img
-                          src={item.image || "/placeholder.svg"}
-                          alt={item.name}
+                          src={item.products.image_url || "/placeholder.svg"}
+                          alt={item.products.name}
                           className="h-full w-full object-cover"
                         />
                       </div>
                       <div className="flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                           <div>
-                            <h3 className="text-sm font-medium">{item.brand}</h3>
-                            <h2 className="text-base font-semibold">{item.name}</h2>
+                            <h3 className="text-sm font-medium">{item.products.brand}</h3>
+                            <h2 className="text-base font-semibold">{item.products.name}</h2>
                             <div className="mt-1 text-sm text-muted-foreground">
                               <span>Size: {item.size}</span>
                               <span className="mx-2">|</span>
-                              <span>Color: {item.color}</span>
+                              <span>Qty: {item.quantity}</span>
                             </div>
                           </div>
                           <div className="mt-2 sm:mt-0 sm:text-right">
-                            <div className="text-base font-semibold">${(item.price * item.quantity).toFixed(2)}</div>
-                            <div className="text-sm text-muted-foreground">${item.price.toFixed(2)} each</div>
+                            <div className="text-base font-semibold">
+                              ${(item.products.price * item.quantity).toFixed(2)}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              ${item.products.price.toFixed(2)} each
+                            </div>
                           </div>
                         </div>
                         <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                          {/* Add +/- logic later if needed */}
                           <div className="flex items-center space-x-2">
                             <Button variant="outline" size="icon" className="h-8 w-8 rounded-md">
                               <Minus className="h-3 w-3" />
-                              <span className="sr-only">Decrease quantity</span>
                             </Button>
                             <span className="w-8 text-center">{item.quantity}</span>
                             <Button variant="outline" size="icon" className="h-8 w-8 rounded-md">
                               <Plus className="h-3 w-3" />
-                              <span className="sr-only">Increase quantity</span>
                             </Button>
                           </div>
                           <Button variant="ghost" size="sm" className="h-8 text-muted-foreground">
@@ -119,6 +111,8 @@ export default function CartPage() {
               </div>
             )}
           </div>
+
+          {/* RIGHT: SUMMARY */}
           <div>
             <div className="sticky top-24 rounded-lg border bg-background p-6">
               <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
@@ -138,23 +132,9 @@ export default function CartPage() {
                 </div>
               </div>
               <Button className="mt-6 w-full">Proceed to Checkout</Button>
-              <div className="mt-6 space-y-4">
-                <div>
-                  <h3 className="mb-2 text-sm font-medium">Have a promo code?</h3>
-                  <div className="flex">
-                    <Input placeholder="Enter code" className="rounded-r-none" />
-                    <Button variant="outline" className="rounded-l-none">
-                      Apply
-                    </Button>
-                  </div>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  <p>Shipping calculated at checkout</p>
-                  <p className="mt-1">Estimated delivery: 3-5 business days</p>
-                </div>
-              </div>
             </div>
           </div>
+
         </div>
         <div className="mt-12">
           <h2 className="mb-4 text-lg font-semibold">You May Also Like</h2>
@@ -185,45 +165,8 @@ export default function CartPage() {
   )
 }
 
-// Sample data for recommended products
-const recommendedProducts = [
-  {
-    id: 1,
-    name: "Classic Crew Neck T-Shirt",
-    brand: "Adidas",
-    price: 24.99,
-    discount: 20,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 2,
-    name: "Graphic Print T-Shirt",
-    brand: "Puma",
-    price: 29.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 3,
-    name: "V-Neck Cotton T-Shirt",
-    brand: "H&M",
-    price: 19.99,
-    discount: 15,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 4,
-    name: "Long Sleeve T-Shirt",
-    brand: "Nike",
-    price: 34.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 5,
-    name: "Striped Cotton T-Shirt",
-    brand: "Zara",
-    price: 27.99,
-    discount: 30,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-]
-
+// You’ll need to replace this with actual logic to get user ID from cookie/session
+function getUserId() {
+  // For now just return a hardcoded user_id
+  return "e932f5dc-949c-4341-9237-27126ef03bbb"
+}
