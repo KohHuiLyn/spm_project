@@ -1,77 +1,242 @@
-import DeployButton from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import HeaderAuth from "@/components/header-auth";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
-import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import Link from "next/link";
-import "./globals.css";
+import type React from "react"
+import { EnvVarWarning } from "@/components/env-var-warning"
+import HeaderAuth from "@/components/header-auth"
+import { ThemeSwitcher } from "@/components/theme-switcher"
+import { hasEnvVars } from "@/utils/supabase/check-env-vars"
+import { Geist } from "next/font/google"
+import { ThemeProvider } from "next-themes"
+import Link from "next/link"
+import { Search, Heart, ShoppingBag } from "lucide-react"
+import "./globals.css"
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
-};
+  title: "New Arrivals Zalora Singapore",
+  description: "Shop the latest fashion trends at Zalora",
+}
 
 const geistSans = Geist({
   display: "swap",
   subsets: ["latin"],
-});
+})
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                  <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Next.js Supabase Starter</Link>
-                    <div className="flex items-center gap-2">
-                      <DeployButton />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <main className="min-h-screen flex flex-col">
+            {/* Top promotional banner */}
+            <div className="w-full bg-[#f5f5f5] text-xs py-2 flex justify-center items-center space-x-4 overflow-x-auto whitespace-nowrap px-4">
+              <div className="flex items-center">
+                <span>30 Days Free Returns | T&C Apply</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="ml-1 h-3 w-3"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+              <div className="flex items-center">
+                <span className="bg-[#7b1fa2] text-white px-1">VIP</span>
+                <span className="ml-1">Become a ZALORA VIP today!</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="ml-1 h-3 w-3"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+              <div className="flex items-center">
+                <span>Extra 10% Off + Free Shipping on Your First App Purchase</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="ml-1 h-3 w-3"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Main header */}
+            <header className="sticky top-0 z-50 w-full border-b bg-white">
+              <div className="container mx-auto px-4 py-4">
+                {/* Logo and search row */}
+                <div className="flex items-center justify-between mb-4">
+                  <Link href="/" className="flex-shrink-0">
+                    <div className="text-2xl tracking-wider font-light">ZALORA</div>
+                  </Link>
+
+                  <div className="flex-grow mx-8 max-w-xl">
+                    <div className="relative">
+                      <input
+                        type="search"
+                        placeholder="Levi's: Up to 40% Off"
+                        className="w-full rounded-full border border-gray-300 pl-4 pr-10 py-2 text-sm"
+                      />
+                      <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <Search className="h-6 w-6" color="white" style={{backgroundColor:'black', padding:3, borderRadius:'1000px'}} />
+                      </button>
                     </div>
                   </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                </div>
-              </nav>
-              <div className="flex flex-col gap-20 max-w-5xl p-5">
-                {children}
-              </div>
 
-              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-                <p>
-                  Powered by{" "}
-                  <a
-                    href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-                    target="_blank"
-                    className="font-bold hover:underline"
-                    rel="noreferrer"
-                  >
-                    Supabase
-                  </a>
-                </p>
-                <ThemeSwitcher />
-              </footer>
-            </div>
+                  <div className="flex items-center space-x-4">
+                    <button aria-label="Wishlist">
+                      <Heart className="h-5 w-5" />
+                    </button>
+                    <button aria-label="Shopping Bag" className="relative">
+                      <ShoppingBag className="h-5 w-5" />
+                      <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
+                        0
+                      </span>
+                    </button>
+                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+                  </div>
+                </div>
+
+                {/* Navigation categories */}
+                <nav className="flex items-center justify-center space-x-8 text-sm font-medium">
+                  <Link href="/products?filter=women" className="hover:font-bold">
+                    WOMEN
+                  </Link>
+                  <Link href="/men" className="hover:font-bold">
+                    MEN
+                  </Link>
+                  <Link href="/luxury" className="hover:font-bold">
+                    LUXURY
+                  </Link>
+                  <Link href="/sports" className="hover:font-bold">
+                    SPORTS
+                  </Link>
+                  <Link href="/beauty" className="hover:font-bold">
+                    BEAUTY
+                  </Link>
+                  <Link href="/kids" className="hover:font-bold">
+                    KIDS
+                  </Link>
+                  <Link href="/lifestyle" className="hover:font-bold">
+                    LIFESTYLE
+                  </Link>
+                </nav>
+              </div>
+            </header>
+
+            <div className="flex-1">{children}</div>
+
+            <footer className="border-t bg-white">
+              <div className="container mx-auto px-4 py-12">
+                <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+                  <div>
+                    <h3 className="mb-4 text-lg font-medium">Shop</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Women
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Men
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Kids
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Beauty
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="mb-4 text-lg font-medium">Help</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Customer Service
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Track Order
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Returns & Refunds
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="mb-4 text-lg font-medium">About</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          About Us
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#" className="text-gray-500 hover:text-black">
+                          Careers
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="mb-4 text-lg font-medium">Contact</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>
+                        <span className="text-gray-500">Email: </span>
+                        <Link href="mailto:support@zalora.com" className="hover:underline">
+                          support@zalora.com
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-12 border-t pt-8 text-center text-sm text-gray-500">
+                  <p className="mb-2">© 2023 ZALORA. All rights reserved.</p>
+                </div>
+              </div>
+            </footer>
           </main>
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
+

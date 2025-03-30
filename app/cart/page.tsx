@@ -1,0 +1,271 @@
+import Link from "next/link"
+import { ChevronRight, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+
+export default function CartPage() {
+  // Sample cart data
+  const cartItems = [
+    {
+      id: 1,
+      name: "Slim Fit Cotton T-Shirt",
+      brand: "Nike",
+      price: 29.99,
+      quantity: 2,
+      size: "M",
+      color: "Black",
+      image: "/placeholder.svg?height=120&width=120",
+    },
+    {
+      id: 2,
+      name: "Floral Print Summer Dress",
+      brand: "Zara",
+      price: 49.99,
+      quantity: 1,
+      size: "S",
+      color: "Blue",
+      image: "/placeholder.svg?height=120&width=120",
+    },
+    {
+      id: 3,
+      name: "Slim Fit Jeans",
+      brand: "Levi's",
+      price: 59.99,
+      quantity: 1,
+      size: "32",
+      color: "Dark Blue",
+      image: "/placeholder.svg?height=120&width=120",
+    },
+  ]
+
+  // Calculate totals
+  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
+  const shipping = 4.99
+  const total = subtotal + shipping
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-50 w-full border-b bg-background">
+        <div className="container flex h-16 items-center">
+          <div className="mr-4 hidden md:flex">
+            <Link href="/" className="mr-6 flex items-center space-x-2">
+              <span className="text-xl font-bold">ZALORA</span>
+            </Link>
+            <nav className="flex items-center space-x-6 text-sm font-medium">
+              <Link href="/women" className="transition-colors hover:text-primary">
+                WOMEN
+              </Link>
+              <Link href="/men" className="transition-colors hover:text-primary">
+                MEN
+              </Link>
+              <Link href="/luxury" className="transition-colors hover:text-primary">
+                LUXURY
+              </Link>
+              <Link href="/beauty" className="transition-colors hover:text-primary">
+                BEAUTY
+              </Link>
+              <Link href="/kids" className="transition-colors hover:text-primary">
+                KIDS
+              </Link>
+              <Link href="/sports" className="transition-colors hover:text-primary">
+                SPORTS
+              </Link>
+              <Link href="/lifestyle" className="transition-colors hover:text-primary">
+                LIFESTYLE
+              </Link>
+            </nav>
+          </div>
+          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+            <nav className="flex items-center">
+              <Button variant="ghost" size="icon" aria-label="Cart">
+                <ShoppingBag className="h-5 w-5" />
+                <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                  {cartItems.reduce((total, item) => total + item.quantity, 0)}
+                </span>
+              </Button>
+            </nav>
+          </div>
+        </div>
+      </header>
+      <div className="container px-4 py-6 md:px-6">
+        <div className="mb-6 flex items-center space-x-2 text-sm text-muted-foreground">
+          <Link href="/" className="transition-colors hover:text-foreground">
+            Home
+          </Link>
+          <ChevronRight className="h-4 w-4" />
+          <span className="font-medium text-foreground">Shopping Cart</span>
+        </div>
+        <h1 className="mb-6 text-2xl font-bold">Shopping Cart</h1>
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            {cartItems.length > 0 ? (
+              <div className="space-y-4">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="rounded-lg border bg-background p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="h-24 w-24 overflow-hidden rounded-md">
+                        <img
+                          src={item.image || "/placeholder.svg"}
+                          alt={item.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                          <div>
+                            <h3 className="text-sm font-medium">{item.brand}</h3>
+                            <h2 className="text-base font-semibold">{item.name}</h2>
+                            <div className="mt-1 text-sm text-muted-foreground">
+                              <span>Size: {item.size}</span>
+                              <span className="mx-2">|</span>
+                              <span>Color: {item.color}</span>
+                            </div>
+                          </div>
+                          <div className="mt-2 sm:mt-0 sm:text-right">
+                            <div className="text-base font-semibold">${(item.price * item.quantity).toFixed(2)}</div>
+                            <div className="text-sm text-muted-foreground">${item.price.toFixed(2)} each</div>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center space-x-2">
+                            <Button variant="outline" size="icon" className="h-8 w-8 rounded-md">
+                              <Minus className="h-3 w-3" />
+                              <span className="sr-only">Decrease quantity</span>
+                            </Button>
+                            <span className="w-8 text-center">{item.quantity}</span>
+                            <Button variant="outline" size="icon" className="h-8 w-8 rounded-md">
+                              <Plus className="h-3 w-3" />
+                              <span className="sr-only">Increase quantity</span>
+                            </Button>
+                          </div>
+                          <Button variant="ghost" size="sm" className="h-8 text-muted-foreground">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center rounded-lg border bg-background p-8 text-center">
+                <ShoppingBag className="mb-4 h-12 w-12 text-muted-foreground" />
+                <h2 className="mb-2 text-xl font-semibold">Your cart is empty</h2>
+                <p className="mb-6 text-muted-foreground">Looks like you haven't added anything to your cart yet.</p>
+                <Button asChild>
+                  <Link href="/">Continue Shopping</Link>
+                </Button>
+              </div>
+            )}
+          </div>
+          <div>
+            <div className="sticky top-24 rounded-lg border bg-background p-6">
+              <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Shipping</span>
+                  <span>${shipping.toFixed(2)}</span>
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between font-medium">
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+              </div>
+              <Button className="mt-6 w-full">Proceed to Checkout</Button>
+              <div className="mt-6 space-y-4">
+                <div>
+                  <h3 className="mb-2 text-sm font-medium">Have a promo code?</h3>
+                  <div className="flex">
+                    <Input placeholder="Enter code" className="rounded-r-none" />
+                    <Button variant="outline" className="rounded-l-none">
+                      Apply
+                    </Button>
+                  </div>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <p>Shipping calculated at checkout</p>
+                  <p className="mt-1">Estimated delivery: 3-5 business days</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-12">
+          <h2 className="mb-4 text-lg font-semibold">You May Also Like</h2>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {recommendedProducts.map((product) => (
+              <div key={product.id} className="group relative overflow-hidden rounded-lg border bg-background">
+                <div className="aspect-h-4 aspect-w-3 relative overflow-hidden">
+                  <img
+                    src={product.image || "/placeholder.svg"}
+                    alt={product.name}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-sm font-medium">{product.brand}</h3>
+                  <h4 className="mb-2 line-clamp-1 text-sm">{product.name}</h4>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">${product.price.toFixed(2)}</span>
+                    {product.discount && <span className="text-xs text-green-600">{product.discount}% OFF</span>}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Sample data for recommended products
+const recommendedProducts = [
+  {
+    id: 1,
+    name: "Classic Crew Neck T-Shirt",
+    brand: "Adidas",
+    price: 24.99,
+    discount: 20,
+    image: "/placeholder.svg?height=300&width=300",
+  },
+  {
+    id: 2,
+    name: "Graphic Print T-Shirt",
+    brand: "Puma",
+    price: 29.99,
+    image: "/placeholder.svg?height=300&width=300",
+  },
+  {
+    id: 3,
+    name: "V-Neck Cotton T-Shirt",
+    brand: "H&M",
+    price: 19.99,
+    discount: 15,
+    image: "/placeholder.svg?height=300&width=300",
+  },
+  {
+    id: 4,
+    name: "Long Sleeve T-Shirt",
+    brand: "Nike",
+    price: 34.99,
+    image: "/placeholder.svg?height=300&width=300",
+  },
+  {
+    id: 5,
+    name: "Striped Cotton T-Shirt",
+    brand: "Zara",
+    price: 27.99,
+    discount: 30,
+    image: "/placeholder.svg?height=300&width=300",
+  },
+]
+
