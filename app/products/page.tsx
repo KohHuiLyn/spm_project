@@ -16,8 +16,15 @@ import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Slider } from "@/components/ui/slider"
 import { ProductCard } from "@/components/product-card"
-export default function ProductsPage() {
-    
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>
+}) {
+  const params = await searchParams
+  const category = params.category
+
+  console.log("Category:", category)
   return (
     <div className="flex min-h-screen flex-col">
       <div className="container px-4 py-6 md:px-6">
