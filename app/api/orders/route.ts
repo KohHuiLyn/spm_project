@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
 export async function POST(req: Request) {
     const body = await req.json()
     const { user_id, product_id, size, quantity, total_price } = body
-  
+
     const { data, error } = await supabase.from('orders').insert({
       user_id,
       product_id,
