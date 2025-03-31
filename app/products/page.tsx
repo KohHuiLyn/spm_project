@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { ChevronDown, ChevronRight, Filter, Heart, SlidersHorizontal } from "lucide-react"
-import { products } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { useSearchParams } from "next/navigation"
 import {
@@ -23,7 +22,13 @@ export default async function ProductsPage({
 }) {
   const params = await searchParams
   const category = params.category
+  // TO DO: REPLACE WITH RECOMMENDED SHIRTS
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
+    cache: "no-store",
+  })
 
+  const products = await res.json()
+  console.log(products)
   console.log("Category:", category)
   return (
     <div className="flex min-h-screen flex-col">
@@ -264,7 +269,7 @@ export default async function ProductsPage({
             </div>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 " >
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.product_id} product={product} />
               ))}
             </div>
             <div className="mt-8 flex justify-center">

@@ -8,6 +8,8 @@ import { ThemeProvider } from "next-themes"
 import Link from "next/link"
 import { Search, Heart, ShoppingBag } from "lucide-react"
 import "./globals.css"
+import CartIcon from "@/components/cart-count"
+import { createClient } from "@/utils/supabase/server"
 const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
 
 export const metadata = {
@@ -21,11 +23,17 @@ const geistSans = Geist({
   subsets: ["latin"],
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+    const supabase = await createClient();
+  
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+  
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
@@ -115,15 +123,10 @@ export default function RootLayout({
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <button aria-label="Wishlist">
-                      <Heart className="h-5 w-5" />
-                    </button>
-                    <Link href="/cart" aria-label="Shopping Bag" className="relative">
-                    <ShoppingBag className="h-5 w-5" />
-                    <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
-                      0
-                    </span>
-                  </Link>
+                    {user?.id && <Heart className="h-5 w-5" />}
+
+                    {user?.id && <CartIcon userId={user.id} />}
+
                     <HeaderAuth/>
                   </div>
                 </div>

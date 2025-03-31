@@ -4,13 +4,27 @@ import { ChevronRight, Heart, Minus, Plus, Share2, ShoppingBag, Star } from "luc
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { products } from "@/lib/data"
-export default function ProductPage({ params }: { params: { id: string } }) {
-    console.log(params.id)
-      // 2️⃣ Get the product by ID
-  const product = products.find((p) => p.id === Number(params.id));
-  console.log(product)
+import { ProductOptions } from "@/components/product-options"
+import { createClient } from "@/utils/supabase/server"
+export default async function ProductPage({ params }: { params: { id: string } }) {
 
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!params.id) {
+    return redirect("/sign-in");
+  }
+    
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${params.id}`, {
+      cache: 'no-store',
+    })
+    const product = await res.json()
+    const measurementKeys = Object.keys(product.sizes_with_measurements).filter(k => k !== "UK" && k !== "US")
+
+    console.log(product)
   return (
     <div className="flex min-h-screen flex-col">
 
@@ -20,13 +34,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             Home
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <Link href="/men" className="transition-colors hover:text-foreground">
-            Men
+          <Link href="/products" className="transition-colors hover:text-foreground">
+            Women
           </Link>
-          <ChevronRight className="h-4 w-4" />
-          <Link href="/men/clothing" className="transition-colors hover:text-foreground">
-            Clothing
-          </Link>
+
           <ChevronRight className="h-4 w-4" />
           <span className="font-medium text-foreground">T-Shirts</span>
         </nav>
@@ -34,7 +45,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           <div className="space-y-4">
             <div className="overflow-hidden rounded-lg">
               <img
-                src={product.image || "/placeholder.svg"}
+                src={product.image_url || "/placeholder.svg"}
                 alt={product.name}
                 className="h-full w-full object-cover"
               />
@@ -50,12 +61,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                     <Star
                       key={i}
                       className={`h-4 w-4 ${
-                        i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                      } ${i === Math.floor(product.rating) && product.rating % 1 > 0 ? "fill-yellow-400/50" : ""}`}
+                        i < Math.floor(4.6) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      } ${i === Math.floor(4.6) && product.rating % 1 > 0 ? "fill-yellow-400/50" : ""}`}
                     />
                   ))}
                 </div>
-                <span className="text-sm text-muted-foreground">{product.reviewCount} reviews</span>
+                <span className="text-sm text-muted-foreground">10 reviews</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -70,50 +81,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               )}
             </div>
             <Separator />
-            <div>
-              <h3 className="mb-3 text-sm font-medium">Color</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.colors.map((color) => (
-                  <Button key={color} variant="outline" className="rounded-md" size="sm">
-                    {color}
-                  </Button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="mb-3 text-sm font-medium">Size</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => (
-                  <Button key={size} variant="outline" className="w-12 rounded-md" size="sm">
-                    {size}
-                  </Button>
-                ))}
-              </div>
-              <Link href="#" className="mt-2 inline-block text-sm text-primary hover:underline">
-                Size Guide
-              </Link>
-            </div>
-            <div>
-              <h3 className="mb-3 text-sm font-medium">Quantity</h3>
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-md">
-                  <Minus className="h-3 w-3" />
-                  <span className="sr-only">Decrease quantity</span>
-                </Button>
-                <span className="w-12 text-center">1</span>
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-md">
-                  <Plus className="h-3 w-3" />
-                  <span className="sr-only">Increase quantity</span>
-                </Button>
-              </div>
-            </div>
-            <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
-              <Button className="flex-1">Add to Cart</Button>
-              <Button variant="outline" className="flex-1">
-                <Heart className="mr-2 h-4 w-4" />
-                Add to Wishlist
-              </Button>
-            </div>
+            <ProductOptions product={product} userId={user?.id}/>
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">SKU:</span> 12345678
@@ -127,19 +95,43 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             <Tabs defaultValue="description">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="description">Description</TabsTrigger>
-                <TabsTrigger value="features">Features</TabsTrigger>
+                <TabsTrigger value="sizes_with_measurements">Size Guide</TabsTrigger>
                 <TabsTrigger value="reviews">Reviews</TabsTrigger>
               </TabsList>
               <TabsContent value="description" className="mt-4">
                 <p className="text-sm text-muted-foreground">{product.description}</p>
               </TabsContent>
-              <TabsContent value="features" className="mt-4">
-                <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                  {product.features.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-              </TabsContent>
+              <TabsContent value="sizes_with_measurements" className="mt-4">
+  <div className="overflow-auto">
+    <table className="min-w-full text-sm text-left text-muted-foreground border border-gray-300">
+      <thead className="bg-gray-100 text-gray-700">
+        <tr>
+          <th className="px-4 py-2 border">Size</th>
+          <th className="px-4 py-2 border">UK</th>
+          <th className="px-4 py-2 border">US</th>
+          {measurementKeys.map((key) => (
+            <th key={key} className="px-4 py-2 border">{key}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {["XS", "S", "M", "L"].map((size) => (
+          <tr key={size}>
+            <td className="px-4 py-2 border font-medium">{size}</td>
+            <td className="px-4 py-2 border">{product.sizes_with_measurements.UK?.[size] || "-"}</td>
+            <td className="px-4 py-2 border">{product.sizes_with_measurements.US?.[size] || "-"}</td>
+            {measurementKeys.map((key) => (
+              <td key={key} className="px-4 py-2 border">
+                {product.sizes_with_measurements[key]?.[size] || "-"}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</TabsContent>
+
               <TabsContent value="reviews" className="mt-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">

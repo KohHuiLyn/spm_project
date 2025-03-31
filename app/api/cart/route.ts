@@ -35,7 +35,7 @@ export async function GET(req: Request) {
  */
 export async function POST(req: Request) {
   const body = await req.json()
-  const { user_id, product_id, size, quantity } = body
+  const { user_id, product_id, size, quantity, colour } = body
 
   // Add or update cart item (if already exists with same user/product/size combo)
   const { data, error } = await supabase.from('cart_items').upsert({
@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     product_id,
     size,
     quantity,
+    colour,
   })
 
   // Return error if insert/update fails
