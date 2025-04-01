@@ -18,6 +18,15 @@ export default async function Signup(props: {
     );
   }
 
+  // const supabase = await createClient({cookies});
+  // const {
+  //   data: { session },
+  // } = await supabase.auth.getSession();
+
+  // if (session) {
+  //   redirect("/dashboard"); // Already signed in
+  // }
+
   return (
     <>
       <form className="flex flex-col min-w-64 max-w-64 mx-auto">
