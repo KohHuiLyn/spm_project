@@ -1,6 +1,6 @@
-import { createBrowserClient } from '@supabase/ssr';
+// import { createBrowserClient } from '@supabase/ssr';
 
-export const supabase = createBrowserClient(
-  'https://your-project.supabase.co',
-  'your-public-anon-key'
-);
+// export const supabase = createBrowserClient(
+//   'https://your-project.supabase.co',
+//   'your-public-anon-key'
+// );
