@@ -1,3 +1,18 @@
+import { login, signup } from '@/app/(auth-pages)/sign-in/actions'
+
+// export default function LoginPage() {
+//   return (
+//     <form>
+//       <label htmlFor="email">Email:</label>
+//       <input id="email" name="email" type="email" required />
+//       <label htmlFor="password">Password:</label>
+//       <input id="password" name="password" type="password" required />
+//       <button formAction={login}>Log in</button>
+//       <button formAction={signup}>Sign up</button>
+//     </form>
+//   )
+// }
+
 import { signInAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
@@ -34,7 +49,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           placeholder="Your password"
           required
         />
-        <SubmitButton pendingText="Signing In..." formAction={signInAction}>
+        <SubmitButton pendingText="Signing In..." formAction={login}>
           Sign in
         </SubmitButton>
         <FormMessage message={searchParams} />
