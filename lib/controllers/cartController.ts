@@ -9,33 +9,33 @@ import {
   } from "@/lib/models/cartModel";
   
   // Pressing add to cart in product page
-  export async function addToCart({ user_id, product_id, quantity, size, colour }: {
-    user_id: string;
-    product_id: string;
-    quantity: number;
-    size: string;
-    colour: string;
-  }) {
-    try {
-      const { data: existingItem } = await getCartItem(user_id, product_id);
-  
-      if (existingItem) {
-        // If item exists, update the quantity
-        const newQty = existingItem.quantity + quantity;
-        const { data } = await updateCartItem(existingItem.id, newQty);
+export async function addToCart({ user_id, product_id, quantity, size, colour }: {
+  user_id: string;
+  product_id: string;
+  quantity: number;
+  size: string;
+  colour: string;
+}) {
+  try {
+    const { data: existingItem } = await getCartItem(user_id, product_id);
 
-        return new Response(JSON.stringify(data), { status: 200 });
-      } else {
-        // Item doesn't exist, create new
-        const { data, error } = await createCartItem(user_id, product_id, quantity, size, colour);
-        if (error) throw new Error(error.message);
-        
-        return new Response(JSON.stringify(data), { status: 201 });
-      }
-    } catch (error: any) {
-      return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    if (existingItem) {
+      // If item exists, update the quantity
+      const newQty = existingItem.quantity + quantity;
+      const { data } = await updateCartItem(existingItem.id, newQty);
+
+      return new Response(JSON.stringify(data), { status: 200 });
+    } else {
+      // Item doesn't exist, create new
+      const { data, error } = await createCartItem(user_id, product_id, quantity, size, colour);
+      if (error) throw new Error(error.message);
+      
+      return new Response(JSON.stringify(data), { status: 201 });
     }
+  } catch (error: any) {
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
+}
 
   // PUT: Set specific quantity (not add)
   // Updates the cart qty in cart

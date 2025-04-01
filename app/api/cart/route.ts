@@ -18,7 +18,6 @@ export async function GET(req: Request) {
   // Validate Input
   if (!user_id) return new Response(JSON.stringify({ error: "Missing user_id" }), { status: 400 });
   
-
   return viewCart(user_id);
 }
 

@@ -8,21 +8,45 @@ import {
 } from "@/lib/controllers/productController";
 
 
-export async function GET(req : Request) {
-  const body = await req.json();
-  const id = body.get("shop_id");
-  const name = body.get("shop_name");
-  const minPrice = body.get("minPrice");
-  const maxPrice = body.get("maxPrice");
-  if (id) {
-    return NextResponse.json(viewShopProducts(id));
-  } else if (name) { 
-    return NextResponse.json(findProductByName(id));
-  } else if (minPrice && maxPrice) {
-    return NextResponse.json(findProductsByPrice({minPrice, maxPrice}));
-  }
+// export async function GET(req : Request) {
+//   const body = await req.json();
+//   const id = body.get("shop_id");
+//   const name = body.get("shop_name");
+//   const minPrice = body.get("minPrice");
+//   const maxPrice = body.get("maxPrice");
+//   if (id) {
+//     return NextResponse.json(viewShopProducts(id));
+//   } else if (name) { 
+//     return NextResponse.json(findProductByName(id));
+//   } else if (minPrice && maxPrice) {
+//     return NextResponse.json(findProductsByPrice({minPrice, maxPrice}));
+//   }
   
-  // Return all product data
+//   // Return all product data
+//   return NextResponse.json(viewAllProducts());
+// }
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+
+  const id = searchParams.get("shop_id");
+  const name = searchParams.get("shop_name");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+
+  if (id) {
+    return NextResponse.json(viewShopProducts({shop_id : id}));
+  }
+
+  if (name) {
+    return NextResponse.json(findProductByName({shop_name : name}));
+  }
+
+  if (minPrice && maxPrice) {
+    return NextResponse.json(findProductsByPrice({ minPrice : parseFloat(minPrice), maxPrice : parseFloat(maxPrice) }));
+  }
+
+  // Default: Return all products
   return NextResponse.json(viewAllProducts());
 }
 
