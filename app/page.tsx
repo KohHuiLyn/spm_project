@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { categories } from "@/lib/data"
 import { ProductCard } from "@/components/product-card"
+import { TinderProduct } from "@/components/tinder-product"
 
 export default async function Home() {
 
@@ -20,7 +21,7 @@ export default async function Home() {
           <div className="relative h-[500px] w-full overflow-hidden rounded-lg">
           <div className="relative h-[500px] w-full overflow-hidden rounded-lg">
               <Image
-                src="/images/banner.jpeg"
+                src="/images/banner.webp"
                 alt="Hero Banner"
                 fill
                 className="object-cover"
@@ -66,21 +67,33 @@ export default async function Home() {
         </div>
       </section>
 
+
       <section className="w-full py-12">
         <div className="container px-4 md:px-6">
           <h2 className="text-2xl font-bold mb-6">For you</h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 " >
-              {products.map((product) => (
+              {products.slice(0,8).map((product) => (
                 <ProductCard key={product.product_id} product={product} />
               ))}
             </div>
         </div>
       </section>
 
+      <section className="w-full py-12">
+        <div className="container px-4 md:px-6">
+          <h2 className="text-2xl font-bold mb-6">Discover Products</h2>
+          <div className="flex justify-center">
+            <div className="w-full md:w-1/4 h-auto">
+              <TinderProduct products={products} />
+            </div>
+          </div>
+
+        </div>
+      </section>
       <section className="w-full bg-gray-100 py-12">
         <div className="container px-4 md:px-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div className="relative overflow-hidden rounded-lg bg-gray-200 h-64 flex items-center justify-center">
+            <div className="relative overflow-hidden rounded-lg bg-gray-200 h-64 flex items-center justify-center bg-cover bg-center bg-[url('/images/womensFashion.jpg')]">
               <div className="absolute inset-0 flex flex-col items-start justify-end bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
                 <h3 className="mb-2 text-xl font-bold">Women's Fashion</h3>
                 <p className="mb-4">Up to 50% off on selected items</p>
@@ -89,8 +102,8 @@ export default async function Home() {
                 </button>
               </div>
             </div>
-            <div className="relative overflow-hidden rounded-lg bg-gray-200 h-64 flex items-center justify-center">
-              <div className="absolute inset-0 flex flex-col items-start justify-end bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
+            <div className="relative overflow-hidden rounded-lg bg-gray-200 h-64 flex items-center justify-center bg-cover bg-center bg-[url('/images/mensFashion.jpg')]">
+              <div className="absolute inset-0 flex flex-col items-start justify-end bg-gradient-to-t from-black/70 to-transparent p-6 text-white" >
                 <h3 className="mb-2 text-xl font-bold">Men's Collection</h3>
                 <p className="mb-4">New arrivals for summer</p>
                 <button className="border border-white text-white hover:bg-white hover:text-black px-4 py-2 rounded-md">
@@ -98,7 +111,7 @@ export default async function Home() {
                 </button>
               </div>
             </div>
-            <div className="relative overflow-hidden rounded-lg bg-gray-200 h-64 flex items-center justify-center">
+            <div className="relative overflow-hidden rounded-lg bg-gray-200 h-64 flex items-center justify-center bg-cover bg-center bg-[url('/images/accessories.jpg')]">
               <div className="absolute inset-0 flex flex-col items-start justify-end bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
                 <h3 className="mb-2 text-xl font-bold">Accessories</h3>
                 <p className="mb-4">Complete your look</p>
