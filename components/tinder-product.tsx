@@ -180,7 +180,10 @@ export function TinderProduct({ products }: { products: Product[] }) {
             <div className="relative h-full w-full">
               <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/70 to-transparent p-6 text-white z-10 pointer-events-none">
                 <h3 className="text-xl font-bold">{currentProduct.name}</h3>
-                <p className="text-lg font-semibold">${currentProduct.price.toFixed(2)}</p>
+                <p className="text-lg font-semibold">
+                  {typeof currentProduct.price === "number" ? `$${currentProduct.price.toFixed(2)}` : "Price not available"}
+                </p>
+
               </div>
 
               <div

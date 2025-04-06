@@ -30,42 +30,93 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { ProductCard } from "@/components/product-card";
 import { useEffect, useState } from "react";
+
+// Define the Product interface
+interface Product {
+  product_id: string;
+  name: string;
+  image_url: string;
+  description?: string;
+  material?: string;
+  price: number;
+  created_at: string;
+  tag?: string;
+  quantity: number;
+  colour?: string;
+  sizes_with_measurements?: Record<string, any>;
+}
+
 export default function ProductsPage({
   searchParams,
 }: {
   searchParams: Promise<{ category?: string }>;
 }) {
   const [category, setCategory] = useState("");
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const pageSize = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?limit=100`,
           {
             cache: "no-store",
           }
         );
-        const data = await res.json();
+        
+        if (!res.ok) {
+          throw new Error('Failed to fetch products');
+        }
+
+        const responseData = await res.json();
+        
+        // Check if data exists and is an array
+        if (!responseData.data || !Array.isArray(responseData.data)) {
+          throw new Error('Invalid data format received from API');
+        }
+
+        // Transform the data to ensure all required fields are present
+        const transformedProducts = responseData.data.map((product: any) => ({
+          ...product,
+          price: product.price || 0, // Default price to 0 if not present
+          created_at: product.created_at || new Date().toISOString(),
+          quantity: product.quantity || 0,
+        }));
 
         const params = await searchParams;
-        setCategory(params.category);
-        setProducts(data);
+        setCategory(params.category || "");
+        setProducts(transformedProducts);
       } catch (error) {
         console.error("Failed to fetch products:", error);
+        setError(error instanceof Error ? error.message : 'An error occurred while fetching products');
+        setProducts([]); // Set empty array on error
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
-
-  const [currentPage, setCurrentPage] = useState(1);
+  }, [searchParams]);
 
   // Pagination logic
   const totalPages = Math.ceil(products.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const currentProducts = products.slice(startIndex, startIndex + pageSize);
+
+  if (loading) {
+    return <div className="container px-4 py-6 md:px-6">Loading products...</div>;
+  }
+
+  if (error) {
+    return <div className="container px-4 py-6 md:px-6">Error: {error}</div>;
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="container px-4 py-6 md:px-6">

@@ -1,30 +1,34 @@
 import Link from "next/link"
 import { ChevronRight, Heart, Minus, Plus, Share2, ShoppingBag, Star } from "lucide-react"
-
+import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ProductOptions } from "@/components/product-options"
 import { createClient } from "@/utils/supabase/server"
+import SizeRecommender from "@/components/SizeRecommender"
+import StyleRecommender from "@/components/StyleRecommender"
+import { cookies } from "next/headers"
+
 export default async function ProductPage({ params }: { params: { id: string } }) {
-
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!params.id) {
-    return redirect("/sign-in");
+  // Use hardcoded user ID instead of auth
+  const USER_ID = 'e932f5dc-949c-4341-9237-27126ef03bbb';
+  
+  // Get params.id properly
+  const productId = params.id;
+  
+  if (!productId) {
+    return redirect("/");
   }
     
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${params.id}`, {
-      cache: 'no-store',
-    })
-    const product = await res.json()
-    const measurementKeys = Object.keys(product.sizes_with_measurements).filter(k => k !== "UK" && k !== "US")
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${productId}`, {
+    cache: 'no-store',
+  });
+  
+  const product = await res.json();
+  const measurementKeys = Object.keys(product.sizes_with_measurements).filter(k => k !== "UK" && k !== "US")
 
-    console.log(product)
+  console.log(product)
   return (
     <div className="flex min-h-screen flex-col">
 
@@ -81,7 +85,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
               )}
             </div>
             <Separator />
-            <ProductOptions product={product} userId={user?.id}/>
+
+            {/* Size Recommender Component */}
+            <SizeRecommender productId={productId} />
+            
+            <ProductOptions product={product} userId={USER_ID}/>
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">SKU:</span> 12345678
@@ -102,36 +110,35 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 <p className="text-sm text-muted-foreground">{product.description}</p>
               </TabsContent>
               <TabsContent value="sizes_with_measurements" className="mt-4">
-  <div className="overflow-auto">
-    <table className="min-w-full text-sm text-left text-muted-foreground border border-gray-300">
-      <thead className="bg-gray-100 text-gray-700">
-        <tr>
-          <th className="px-4 py-2 border">Size</th>
-          <th className="px-4 py-2 border">UK</th>
-          <th className="px-4 py-2 border">US</th>
-          {measurementKeys.map((key) => (
-            <th key={key} className="px-4 py-2 border">{key}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {["XS", "S", "M", "L"].map((size) => (
-          <tr key={size}>
-            <td className="px-4 py-2 border font-medium">{size}</td>
-            <td className="px-4 py-2 border">{product.sizes_with_measurements.UK?.[size] || "-"}</td>
-            <td className="px-4 py-2 border">{product.sizes_with_measurements.US?.[size] || "-"}</td>
-            {measurementKeys.map((key) => (
-              <td key={key} className="px-4 py-2 border">
-                {product.sizes_with_measurements[key]?.[size] || "-"}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</TabsContent>
-
+                <div className="overflow-auto">
+                  <table className="min-w-full text-sm text-left text-muted-foreground border border-gray-300">
+                    <thead className="bg-gray-100 text-gray-700">
+                      <tr>
+                        <th className="px-4 py-2 border">Size</th>
+                        <th className="px-4 py-2 border">UK</th>
+                        <th className="px-4 py-2 border">US</th>
+                        {measurementKeys.map((key) => (
+                          <th key={key} className="px-4 py-2 border">{key}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {["XS", "S", "M", "L"].map((size) => (
+                        <tr key={size}>
+                          <td className="px-4 py-2 border font-medium">{size}</td>
+                          <td className="px-4 py-2 border">{product.sizes_with_measurements.UK?.[size] || "-"}</td>
+                          <td className="px-4 py-2 border">{product.sizes_with_measurements.US?.[size] || "-"}</td>
+                          {measurementKeys.map((key) => (
+                            <td key={key} className="px-4 py-2 border">
+                              {product.sizes_with_measurements[key]?.[size] || "-"}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </TabsContent>
               <TabsContent value="reviews" className="mt-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -192,7 +199,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
             </Tabs>
           </div>
         </div>
-        <section className="mt-16">
+
+        {/* Style Recommender Component */}
+        <StyleRecommender productId={productId} />
+        
+        <section className="mt-8">
           <h2 className="mb-6 text-2xl font-bold">You May Also Like</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {relatedProducts.map((product) => (

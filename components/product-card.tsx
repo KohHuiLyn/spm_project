@@ -17,6 +17,12 @@ export interface Product {
 
 
 export function ProductCard({ product }: { product: Product }) {
+  // Format price safely with fallback to 0
+  const formatPrice = (price: number | undefined) => {
+    if (typeof price !== 'number') return '0.00';
+    return price.toFixed(2);
+  };
+
   return (
     <Link href={`/product/${product.product_id}`} passHref>
     <div className="group relative overflow-hidden rounded bg-white">
@@ -38,8 +44,10 @@ export function ProductCard({ product }: { product: Product }) {
 
 
         <div className="mt-2 flex items-center gap-2" style={{fontWeight:'bold'}}>
-          <span className="sale-price">S$ {product.price.toFixed(2)}</span>
-          {product.originalPrice && <span className="original-price">S$ {product.originalPrice.toFixed(2)}</span>}
+          <span className="sale-price">S$ {formatPrice(product.price)}</span>
+          {product.originalPrice && (
+            <span className="original-price">S$ {formatPrice(product.originalPrice)}</span>
+          )}
           {product.discount && <span className="discount-tag">-{product.discount}%</span>}
         </div>
       </div>

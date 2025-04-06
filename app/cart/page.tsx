@@ -19,8 +19,7 @@ export default async function CartPage() {
     return redirect("/sign-in");
   }
 
-  const userId = user.id // Replace this with logic to get actual logged-in user
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cart?user_id=${userId}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cart?user_id=${user.id}`, {
     cache: "no-store",
   })
 
@@ -163,10 +162,4 @@ export default async function CartPage() {
       </div>
     </div>
   )
-}
-
-// You’ll need to replace this with actual logic to get user ID from cookie/session
-function getUserId() {
-  // For now just return a hardcoded user_id
-  return "e932f5dc-949c-4341-9237-27126ef03bbb"
 }

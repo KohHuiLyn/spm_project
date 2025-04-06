@@ -133,13 +133,8 @@ export default async function RootLayout({
 
                 {/* Navigation categories */}
                 <nav className="flex items-center justify-center space-x-8 text-sm font-medium">
+                  <Link href="/products/for-you" className="hover:font-bold text-blue-600">FOR YOU</Link>
                   <Link href="/products?category=women" className="hover:font-bold">WOMEN</Link>
-                  <Link href="/products?category=men" className="hover:font-bold">MEN</Link>
-                  <Link href="/products?category=luxury" className="hover:font-bold">LUXURY</Link>
-                  <Link href="/products?category=sports" className="hover:font-bold">SPORTS</Link>
-                  <Link href="/products?category=beauty" className="hover:font-bold">BEAUTY</Link>
-                  <Link href="/products?category=kids" className="hover:font-bold">KIDS</Link>
-                  <Link href="/products?category=lifestyle" className="hover:font-bold">LIFESTYLE</Link>
                 </nav>
 
               </div>
