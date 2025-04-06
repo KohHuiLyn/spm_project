@@ -268,7 +268,8 @@ export async function GET(req: NextRequest) {
               is_personalized: hasModel,
               model_path: hasModel ? `recommender/models/${user_id}_model` : null,
               user_preferences: userPreferences,
-              user_materials: userMaterials
+              user_materials: userMaterials,
+              timestamp: Date.now() // Add timestamp to prevent caching
             }
           };
           
@@ -280,14 +281,24 @@ export async function GET(req: NextRequest) {
                 recommendations: [],
                 meta: {
                   is_personalized: hasModel,
-                  error_details: 'Empty recommendations from model'
+                  error_details: 'Empty recommendations from model',
+                  timestamp: Date.now() // Add timestamp
                 }
               },
-              { status: 500 }
+              { 
+                status: 500,
+                headers: {
+                  'Cache-Control': 'no-store, max-age=0, must-revalidate'
+                }
+              }
             ));
           }
           
-          resolve(NextResponse.json(responseWithMetadata));
+          resolve(NextResponse.json(responseWithMetadata, {
+            headers: {
+              'Cache-Control': 'no-store, max-age=0, must-revalidate'
+            }
+          }));
         } catch (e) {
           console.error('Error parsing recommendation result:', e);
           

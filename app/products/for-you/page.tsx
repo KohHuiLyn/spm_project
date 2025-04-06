@@ -95,11 +95,14 @@ export default function ForYouPage() {
     try {
       const queryParams = new URLSearchParams({
         user_id: USER_ID,
-        limit: '20'
+        limit: '20',
+        _t: Date.now().toString()
       });
       
       // First check if user has a model via the stats endpoint
-      const statsResponse = await fetch(`/api/user/style-interaction/stats?user_id=${USER_ID}`);
+      const statsResponse = await fetch(`/api/user/style-interaction/stats?user_id=${USER_ID}&_t=${Date.now()}`, {
+        cache: 'no-store'
+      });
       if (statsResponse.ok) {
         const stats = await statsResponse.json();
         const hasModel = stats.stats?.has_personalized_model || false;
@@ -113,6 +116,7 @@ export default function ForYouPage() {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache'
             },
             body: JSON.stringify({
               user_id: USER_ID,
@@ -123,15 +127,21 @@ export default function ForYouPage() {
           });
           
           if (trainResponse.ok) {
-            console.log('Model creation triggered successfully');
+            const trainResult = await trainResponse.json();
+            console.log('Model creation triggered successfully:', trainResult);
             // Update model status
             setIsPersonalizedModel(true);
+            
+            // Wait a moment to ensure the model is fully saved to disk
+            await new Promise(resolve => setTimeout(resolve, 1000));
           }
         }
       }
       
       // Fetch recommendations - the API will check if the model exists and use it
-      const recResponse = await fetch(`/api/products/recommend/style?${queryParams.toString()}`);
+      const recResponse = await fetch(`/api/products/recommend/style?${queryParams.toString()}`, {
+        cache: 'no-store'
+      });
       if (recResponse.ok) {
         const responseData = await recResponse.json();
         console.log('API response:', responseData);

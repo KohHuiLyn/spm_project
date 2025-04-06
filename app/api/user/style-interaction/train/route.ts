@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     `);
     
     // Create models directory if needed
-    const modelsDir = path.join(process.cwd(), 'models');
+    const modelsDir = path.join(process.cwd(), 'recommender', 'models');
     if (!fs.existsSync(modelsDir)) {
       fs.mkdirSync(modelsDir, { recursive: true });
     }
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Even if training failed, check if the model directory exists
-    const userModelDir = path.join(process.cwd(), 'models', `${user_id}_model`);
+    const userModelDir = path.join(process.cwd(), 'recommender', 'models', `${user_id}_model`);
     const modelExists = fs.existsSync(userModelDir);
 
     console.log(`Training ${success ? 'succeeded' : 'failed'}, model directory ${modelExists ? 'exists' : 'does not exist'}`);
